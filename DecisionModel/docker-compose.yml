@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  decision-engine:
+    build:
+      context: .
+    container_name: decision-engine
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - PYTHONUNBUFFERED=1
+      - DATA_DIR=/app/data
+      - DATABASE_PATH=/app/data/tpch.duckdb
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+    volumes:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
